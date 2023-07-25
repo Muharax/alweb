@@ -1,5 +1,6 @@
 <style>
 	#PANEL-DANE{
+		margin-bottom: 20px;
 		margin-top:8px;
 	}
 </style>
@@ -19,7 +20,7 @@
 
 
 <script>
-$(document).on("click", '#szukaj', function() {
+$(document).one("click", '#szukaj', function() {
 	$.ajax({
 		type: "POST",
 		url: URL+'/admin/uzytkownicy/core/szukaj_uzytkownika_core.php',
@@ -30,5 +31,7 @@ $(document).on("click", '#szukaj', function() {
 	})	
 	
 });
+
+
 </script>
 

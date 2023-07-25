@@ -82,7 +82,13 @@ body{
 }
 
 .e-window{
-    width: 85%;
+	width: 85%;
+}
+#white{
+	height: 80%;
+    overflow: auto;
+    margin-bottom: 20px;
+    margin-top: 8px;
 }
 
 .logo-img{
