@@ -10,8 +10,6 @@
 
 <script>
 $(document).one("click", '.pagina', function() {
-	var t2 = $('#mySelect').val();
-	console.log(t2);
 	var t1 = $(this).attr('id');
 	$.ajax({
 		type: "POST",
@@ -37,12 +35,26 @@ $("#mySelect").change(function() {
 	})
 });
 
+$('#myInput').change('input', function() {
+	var t1 = $(this).val();
+        $.ajax({
+			type: "POST",
+			data: {"nr":t1},
+			url: URL+'/admin/uzytkownicy/core/szukaj_uzytkownika_core.php',
+			dataType:'text',
+			success: function(msg){
+				$("#PANEL-DANE").html(msg);
+			},
+		})
+	});
 
-// let table = new DataTable('#example');
 $('#example').dataTable({
+
+	scrollY: '50vh',
+    scrollCollapse: true,
 	searching: true,
 	paging: false,
-	ordering: false,
+	ordering: true,
 	info:false,
 });
 
@@ -54,8 +66,8 @@ $('#example').dataTable({
 if($_SERVER["REQUEST_METHOD"] === "POST"){
 	require('../../../session.php');
 	if(isset($_POST['ile'])){
-		$limit = $_POST['ile'];
-		$_SESSION['ile'] = $limit;
+		(int)$limit = $_POST['ile'];
+		(int)$_SESSION['ile'] = $limit;
 	}else{
 		if(!isset($_SESSION['ile'])){
 			$limit = 10;	
@@ -82,14 +94,14 @@ echo '<div class="OPEN">';
 	if($page == 1){
 		echo '<button class="pagina" href="#" id='.$page.' disabled><</button>';
 	}else{
-		echo '<button class="pagina" href="#" id='.($page-1).'><</button>';
+		echo '<button class="pagina" href="#" id='.((int)$page-1).'><</button>';
 	}
-	echo '<button class="pagina" href="#" id='.$page.'>'.$page.'</button>';
+	echo '<input type="text" href="#" id="myInput" value='.$page.'>';
 	echo '<button class="pagina" href="#" id='.$total_pages.'>'.$total_pages.'</button>';
 	if($page == $total_pages){
 		echo '<button class="pagina" href="#" id='.$page.' disabled>></button>';
 	}else{
-		echo '<button class="pagina" href="#" id='.($page+1).'>></button>';
+		echo '<button class="pagina" href="#" id='.((int)$page+1).'>></button>';
 	}
 		echo'<select name="mySelect" id="mySelect">
 		  <option value='.$limit.'>'.$limit.'</option>
@@ -98,32 +110,30 @@ echo '<div class="OPEN">';
 		  <option value="50">50</option>
 		  <option value="100">100</option>
 		  <option value="200">200</option>
+		  <option value="2000">2000</option>
 		</select>';
 echo '</div>';
 
-$starting_limit = ($page-1)*$limit;
+$starting_limit = ((int)$page-1)*$limit;
 $show  = "SELECT * FROM users ORDER BY `id` ASC LIMIT ?,?";
 $r = $db->prepare($show);
 $r->execute([$starting_limit, $limit]);
 echo '<div id="white">
 
-	<table id="example">
+	<table id="example" class="">
 	<thead>
 		<tr>
-			<th>No</th>
 			<th>ID</th>
 			<th>Nazwa</th>
 			<th>Pkt</th>
 			<th>Uprawnienia</th>
 			<th>Logowania</th>
-			<th>Opcje</th>
+			<th></th>
 		</tr>
 		</thead>
 		<tbody>';
-$i = 1;
 while($res = $r->fetch(PDO::FETCH_ASSOC)):
 echo '<tr>				
-		<td>' . $i++ . '</td>
 		<td>' . $res['id'] . '</td>
 		<td>' . $res['user'] . '</td>
 		<td>' . $res['pkt'] . '</td>

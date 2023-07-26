@@ -14,14 +14,15 @@
 
 	include('../header.php');
 	
-	if(isset($_SESSION['alert'])) echo $_SESSION['alert']; 
-		unset($_SESSION['alert']);
 ?>
 
 
 
 
 <div id="LOGOWANIE">
+<?php if(isset($_SESSION['alert'])) echo $_SESSION['alert']; 
+		unset($_SESSION['alert']);
+?>
 <div class="LG">
 	<div class="logos">
 		<img src="<?php echo URL;?>img/skynet.png" alt="" class="logos-SWG">
